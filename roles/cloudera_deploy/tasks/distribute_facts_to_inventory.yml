@@ -26,6 +26,14 @@
     loop_var: __play_host
     label: __play_host
 
+- name: LOCAL Set Sensitive Facts with no-log for later use in Cluster Deployment
+  ansible.builtin.set_fact:
+    cloudera_manager_admin_password: "{{ globals.admin_password }}"
+    cloudera_manager_license_file: "{{ globals.cloudera_license_file | default(omit) }}"
+  delegate_to: "localhost"
+  delegate_facts: true
+  #no_log: true
+
 - name: Set Sensitive Facts with no-log for later use in Cluster Deployment
   ansible.builtin.set_fact:
     cloudera_manager_admin_password: "{{ globals.admin_password }}"

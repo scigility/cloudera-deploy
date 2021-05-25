@@ -21,14 +21,16 @@ clusters:
     services: [HDFS, YARN, ZOOKEEPER]
     repositories:
       - https://archive.cloudera.com/cdh7/7.1.4.0/parcels/
+    # Changed the dir configs below, to get them out of the too small root partition (30GB by default)
+    # TODO Ensure that mount point is not on emphemeral disk. If it is, easier to just provision a larger root part.
     configs:
       HDFS:
         DATANODE:
-          dfs_data_dir_list: /dfs/dn
+          dfs_data_dir_list: /app/data/dfs/dn
         NAMENODE:
-          dfs_name_dir_list: /dfs/nn
+          dfs_name_dir_list: /app/data/dfs/nn
         SECONDARYNAMENODE:
-          fs_checkpoint_dir_list: /dfs/snn
+          fs_checkpoint_dir_list: /app/data/dfs/snn
       YARN:
         RESOURCEMANAGER:
           yarn_scheduler_maximum_allocation_mb: 4096
@@ -44,6 +46,11 @@ clusters:
       ZOOKEEPER:
         SERVICEWIDE:
           zookeeper_datadir_autocreate: true
+        # Added following entries (inspired from defaults.j2) also for custom "zk" dirs
+        SERVER:
+          dataDir: /app/data/zookeeper/dataDir
+          dataLogDir: /app/data/zookeeper/dataLogDir
+
     host_templates:
       Master1:
         HDFS: [NAMENODE, SECONDARYNAMENODE]

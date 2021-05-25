@@ -351,6 +351,8 @@
     __no_log_globals:
       admin_password: "{{ admin_password | mandatory }}"
 
+# TODO undo hack. How to ensure below used vars are all undefined (empty is not enough) ?!
 - name: Determine if Cloud Roles should be called
   ansible.builtin.set_fact:
-    init__call_cloud_role: "{{ infra is defined or env is defined or ml is defined or de is defined or datahub is defined or opdb is defined or dw is defined | default(False) }}"
+#    init__call_cloud_role: "{{ infra is defined or env is defined or ml is defined or de is defined or datahub is defined or opdb is defined or dw is defined | default(False) }}"
+    init__call_cloud_role:  False
