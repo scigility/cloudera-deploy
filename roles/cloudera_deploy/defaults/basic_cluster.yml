@@ -26,11 +26,11 @@ clusters:
     configs:
       HDFS:
         DATANODE:
-          dfs_data_dir_list: /mnt/resource/dfs/dn
+          dfs_data_dir_list: /app/data/dfs/dn
         NAMENODE:
-          dfs_name_dir_list: /mnt/resource/dfs/nn
+          dfs_name_dir_list: /app/data/dfs/nn
         SECONDARYNAMENODE:
-          fs_checkpoint_dir_list: /mnt/resource/dfs/snn
+          fs_checkpoint_dir_list: /app/data/dfs/snn
       YARN:
         RESOURCEMANAGER:
           yarn_scheduler_maximum_allocation_mb: 4096
@@ -48,8 +48,8 @@ clusters:
           zookeeper_datadir_autocreate: true
         # Added following entries (inspired from defaults.j2) also for custom "zk" dirs
         SERVER:
-          dataDir: /mnt/resource/zookeeper/dataDir
-          dataLogDir: /mnt/resource/zookeeper/dataLogDir
+          dataDir: /app/data/zookeeper/dataDir
+          dataLogDir: /app/data/zookeeper/dataLogDir
 
     host_templates:
       Master1:
