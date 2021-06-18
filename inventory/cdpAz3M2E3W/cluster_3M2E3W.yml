@@ -435,6 +435,9 @@ clusters:
           - WEBHCAT
         HIVE_ON_TEZ:
           - HIVESERVER2
+        # Note: I just explicitly added the GATEWAY role here, since TEZ has no other role
+        TEZ:
+          - GATEWAY
         ATLAS:
           - ATLAS_SERVER
         INFRA_SOLR:
@@ -461,6 +464,8 @@ clusters:
           - WEBHCAT
         HIVE_ON_TEZ:
           - HIVESERVER2
+        TEZ:
+          - GATEWAY
         ATLAS:
           - ATLAS_SERVER
         INFRA_SOLR:
