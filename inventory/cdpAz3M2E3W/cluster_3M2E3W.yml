@@ -24,6 +24,7 @@ clusters:
       - KNOX
       - HBASE
       - STREAMS_MESSAGING_MANAGER
+      - SCHEMAREGISTRY
       - QUEUEMANAGER
     
     ### DSS_DEV service configs 
@@ -366,6 +367,10 @@ clusters:
         #SERVICEWIDE:
 
     
+      ## Services newly added (since not present on the cluster we derived above cfg from)
+      # Service
+      #SCHEMAREGISTRY:
+    
     ### DSS_DEV host_templates
     host_templates:
       Master1:
@@ -398,7 +403,7 @@ clusters:
           - KAFKA_BROKER
           - KAFKA_CONNECT
           - KAFKA_MIRROR_MAKER
-        SCHEMA_REGISTRY:
+        SCHEMAREGISTRY:
           - SCHEMA_REGISTRY_SERVER
 
       Master3:
@@ -415,7 +420,7 @@ clusters:
           - KAFKA_BROKER
           - KAFKA_CONNECT
           - KAFKA_MIRROR_MAKER
-        SCHEMA_REGISTRY:
+        SCHEMAREGISTRY:
           - SCHEMA_REGISTRY_SERVER
         HBASE:
           - MASTER
