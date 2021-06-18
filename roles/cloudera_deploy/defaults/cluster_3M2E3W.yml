@@ -5,40 +5,487 @@ cloudera_manager_version: 7.1.4
 
 clusters:
   - name: Basic Cluster
-    services: [HDFS, YARN, ZOOKEEPER]
     repositories:
       - https://archive.cloudera.com/cdh7/7.1.4.0/parcels/
+    services:
+      - ZOOKEEPER
+      - HDFS
+      - YARN
+      - SPARK_ON_YARN
+      - RANGER
+      - HUE
+      - INFRA_SOLR
+      - ATLAS
+      - HIVE
+      - HIVE_ON_TEZ
+      - TEZ
+      - ZEPPELIN
+      - KAFKA
+      - KNOX
+      - HBASE
+      - STREAMS_MESSAGING_MANAGER
+      - QUEUEMANAGER
+    
+    ### DSS_DEV service configs 
+    # Note: The config was derived from a cluster export JSON (converted to YML via custom J2-based script)
     configs:
-      HDFS:
-        DATANODE:
-          dfs_data_dir_list: /dfs/dn
-        NAMENODE:
-          dfs_name_dir_list: /dfs/nn
-        SECONDARYNAMENODE:
-          fs_checkpoint_dir_list: /dfs/snn
-      YARN:
-        RESOURCEMANAGER:
-          yarn_scheduler_maximum_allocation_mb: 4096
-          yarn_scheduler_maximum_allocation_vcores: 4
-        NODEMANAGER:
-          yarn_nodemanager_resource_memory_mb: 4096
-          yarn_nodemanager_resource_cpu_vcores: 4
-          yarn_nodemanager_local_dirs:  /tmp/nm
-          yarn_nodemanager_log_dirs: /var/log/nm
-        GATEWAY:
-          mapred_submit_replication: 3
-          mapred_reduce_tasks: 6
-      ZOOKEEPER:
+      # Service
+      RANGER:
+        RANGER_ADMIN:
+          log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+
+        RANGER_TAGSYNC:
+          log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+
+        RANGER_USERSYNC:
+          log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          ranger.usersync.sleeptimeinmillisbetweensynccycle: "14400000"
+
+        #SERVICEWIDE:
+
+
+      # Service
+      HUE:
+        HUE_LOAD_BALANCER:
+          heap_dump_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+
+        HUE_SERVER:
+          heap_dump_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+
+        KT_RENEWER:
+          heap_dump_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+
         SERVICEWIDE:
-          zookeeper_datadir_autocreate: true
+          service_config_suppression_hue_load_balancer_count_validator: "true"
+          time_zone: "Europe/Zurich"
+
+
+      # Service
+      HDFS:
+        #BALANCER:
+
+        DATANODE:
+          datanode_data_directories_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          # DONE custom dirs (all 9 disks)
+          dfs_data_dir_list: "/app/data/disk01/dfs/dn,/app/data/disk02/dfs/dn,/app/data/disk03/dfs/dn,/app/data/disk04/dfs/dn,/app/data/disk05/dfs/dn,/app/data/disk06/dfs/dn,/app/data/disk07/dfs/dn,/app/data/disk08/dfs/dn,/app/data/disk09/dfs/dn"
+          dfs_datanode_data_dir_perm: "700"
+          dfs_datanode_du_reserved: "10732175360"
+          # proposed value by xlaho 2 (vs '3'):
+          dfs_datanode_failed_volumes_tolerated: "2"
+          heap_dump_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          role_config_suppression_dfs_datanode_http_port: "true"
+          role_config_suppression_dfs_datanode_port: "true"
+
+        FAILOVERCONTROLLER:
+          heap_dump_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+
+        GATEWAY:
+          dfs_client_use_trash: "true"
+
+        HTTPFS:
+          heap_dump_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+
+        JOURNALNODE:
+          # DONE custom dirs
+          dfs_journalnode_edits_dir: "/app/data/journalnode/dfs/jn"
+          heap_dump_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          journalnode_edits_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+
+
+        NAMENODE:
+          # DONE custom dirs
+          dfs_name_dir_list: "/app/data/namenode/dfs/nn"
+          heap_dump_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          namenode_data_directories_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          role_health_suppression_name_node_safe_mode: "true"
+
+        NFSGATEWAY:
+          dfs_nfs3_dump_dir: "/app/tmp/.hdfs-nfs"
+          heap_dump_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          nfsgateway_dump_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+
+        SECONDARYNAMENODE:
+          # DONE custom dirs
+          fs_checkpoint_dir_list: "/app/data/namenode/dfs/snn"
+          heap_dump_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          secondarynamenode_checkpoint_directories_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+
+        SERVICEWIDE:
+          dfs_encrypt_data_transfer_algorithm: "AES/CTR/NoPadding"
+          service_health_suppression_hdfs_verify_ec_with_topology: "true"
+
+
+      # Service
+      # Custom renamed to INFRA_SOLR (since the script put 2 SOLR_SERVER elements here, 1 I removed)
+      INFRA_SOLR:
+        GATEWAY:
+          client_config_root_dir: "/etc/solr-infra"
+
+        SOLR_SERVER:
+          heap_dump_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          log_directory_free_space_absolute_thresholds: '{"warning":524288000,"critical":262144000}'
+          process_auto_restart: "true"
+          role_config_suppression_solr_http_port: "true"
+          role_config_suppression_solr_https_port: "true"
+          # DONE custom dir
+          solr_data_dir: "/app/data/solr-infra"
+          solr_java_direct_memory_size: "11471421440"
+          solr_java_heapsize: "8823767040"
+
+        SERVICEWIDE:
+          hdfs_data_dir: "/solr-infra"
+          rm_dirty: "true"
+          zookeeper_znode: "/solr-infra"
+
+
+      # Service
+      ATLAS:
+        ATLAS_SERVER:
+          atlas_max_heap_size: "4096"
+        #SERVICEWIDE:
+
+
+      # Service
+      ZOOKEEPER:
+        SERVER:
+          # DONE custom dirs
+          dataDir: "/app/data/zookeeper"
+          dataLogDir: "/app/data/zookeeper"
+          heap_dump_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          maxClientCnxns: "300"
+          maxSessionTimeout: "60000"
+          zookeeper_server_data_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          zookeeper_server_data_log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+
+
+      # Service
+      QUEUEMANAGER:
+        QUEUEMANAGER_STORE:
+          log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          log_threshold: "DEBUG"
+          process_auto_restart: "true"
+        QUEUEMANAGER_WEBAPP:
+          log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          process_auto_restart: "true"
+
+
+      # Service
+      HIVE_ON_TEZ:
+        #GATEWAY:
+
+        HIVESERVER2:
+          heap_dump_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          hive_on_tez_hs2_downloaded_resources_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          hive_on_tez_hs2_exec_local_scratch_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          process_auto_restart: "true"
+
+        SERVICEWIDE:
+          hms_connector: "hive"
+
+
+      # Service
+      ZEPPELIN:
+        ZEPPELIN_SERVER:
+          log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          # DONE custom dirs
+          zeppelin.dep.localrepo: "/app/data/zeppelin/local-repo"
+          zeppelin.interpreter.localRepo: "/app/data/zeppelin/local-repo"
+          zeppelin.war.tempdir: "/app/data/zeppelin/webapps"
+
+        #SERVICEWIDE:
+
+      # TODO test install with SPARK3 (requires Spark3 parcel repo setup?!)
+      # Service
+      #SPARK3_ON_YARN:
+      #  GATEWAY:
+      #  SPARK3_YARN_HISTORY_SERVER:
+
+
+      # Service
+      KAFKA:
+        KAFKA_BROKER:
+          # DONE custom dirs
+          log.dirs: "/app/data/kafka"
+          log.retention.ms: "259200000"
+          log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          process_auto_restart: "true"
+          role_config_suppression_port: "true"
+
+        KAFKA_CONNECT:
+          log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          process_auto_restart: "true"
+
+        KAFKA_MIRROR_MAKER:
+          log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          process_auto_restart: "true"
+
+        SERVICEWIDE:
+          log.cleaner.delete.retention.ms: "259200000"
+          offsets.retention.minutes: "4320"
+
+
+      # Service
+      HIVE:
+        #GATEWAY:
+        
+        HIVEMETASTORE:
+          heap_dump_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          hive_metastore_server_max_message_size: "858993459"
+          log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+
+        HIVESERVER2:
+          heap_dump_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          hiveserver2_downloaded_resources_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          hiveserver2_exec_local_scratch_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+
+        WEBHCAT:
+          heap_dump_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+
+        #SERVICEWIDE:
+          # set via varlib*j2:
+          #hive_metastore_derby_path: "/app/opt/hive/cloudera_manager/derby/metastore_db"
+
+
+      # Service °17 is KNOX
+      KNOX:
+        #GATEWAY:
+
+        IDBROKER:
+          # set via varlib*j2:
+          #idbroker_conf_dir: "/app/opt/knox/idbroker/conf"
+          #idbroker_data_dir: "/app/opt/knox/idbroker/data"
+          log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          process_auto_restart: "true"
+
+        KNOX_GATEWAY:
+          #gateway_conf_dir: "/app/opt/knox/gateway/conf"
+          #gateway_data_dir: "/app/opt/knox/gateway/data"
+          #gateway_ranger_knox_plugin_conf_path: "/app/opt/knox/ranger-knox-plugin"
+          log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          process_auto_restart: "true"
+
+        #SERVICEWIDE:
+
+
+      # Service °18 is TEZ
+      TEZ: {}
+        # #GATEWAY:
+        # SERVICEWIDE:
+        #   tez_version_uploaded: "0.9.1.7.1.5.0-257"
+
+
+      # Service °19 is YARN
+      YARN:
+        GATEWAY:
+          mapred_reduce_tasks: "12"
+          mapred_submit_replication: "3"
+
+        JOBHISTORY:
+          heap_dump_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+
+        NODEMANAGER:
+          heap_dump_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          nodemanager_local_data_directories_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          nodemanager_log_directories_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          nodemanager_recovery_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          yarn_nodemanager_heartbeat_interval_ms: "100"
+          # DONE custom dirs. Note: The nodes have a custom dir for it: /app/data/nodemanager
+          yarn_nodemanager_local_dirs: "/app/data/disk01/yarn/nm,/app/data/disk02/yarn/nm,/app/data/disk03/yarn/nm,/app/data/disk04/yarn/nm,/app/data/disk05/yarn/nm,/app/data/disk06/yarn/nm,/app/data/disk07/yarn/nm,/app/data/disk08/yarn/nm,/app/data/disk09/yarn/nm"
+          # set via varlib*j2:
+          #yarn_nodemanager_recovery_dir: "/app/opt/hadoop-yarn/yarn-nm-recovery"
+          yarn_nodemanager_resource_memory_mb: "32768"
+
+        RESOURCEMANAGER:
+          heap_dump_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          yarn_resourcemanager_max_completed_applications: "1000"
+          yarn_scheduler_maximum_allocation_mb: "10067"
+          yarn_scheduler_maximum_allocation_vcores: "8"
+
+        SERVICEWIDE:
+          rm_dirty: "true"
+
+
+      # Service °20 is LIVY
+      # LIVY:
+      #   GATEWAY:
+      #   LIVY_SERVER:
+      #     log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+      #     process_auto_restart: "true"
+      #   SERVICEWIDE:
+
+
+      # Service °21 is SPARK_ON_YARN
+      SPARK_ON_YARN:
+        #GATEWAY:
+        SPARK_YARN_HISTORY_SERVER:
+          # set via varlib*j2:
+          #local_storage_dir: "/app/opt/spark/history"
+          log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+          process_auto_restart: "true"
+        #SERVICEWIDE:
+
+
+      # Service °22 is HBASE
+      HBASE:
+        # #GATEWAY:
+        # HBASERESTSERVER:
+        # HBASETHRIFTSERVER:
+        # MASTER:
+        REGIONSERVER:
+          hbase_bucketcache_size: "1"
+          hbase_regionserver_java_heapsize: "52428800"
+        SERVICEWIDE:
+          rm_dirty: "true"
+
+
+      # Service °23 is STREAMS_MESSAGING_MANAGER
+      STREAMS_MESSAGING_MANAGER:
+        STREAMS_MESSAGING_MANAGER_SERVER:
+          SMM_HEAP_SIZE: "5928"
+          log_directory_free_space_absolute_thresholds: '{"warning":5368709120,"critical":2147483648}'
+        STREAMS_MESSAGING_MANAGER_UI:
+          log_directory_free_space_absolute_thresholds: '{"warning":5368709120,"critical":2147483648}'
+
+        #SERVICEWIDE:
+
+    
+    ### DSS_DEV host_templates
     host_templates:
       Master1:
-        HDFS: [NAMENODE, SECONDARYNAMENODE]
-        YARN: [RESOURCEMANAGER, JOBHISTORY]
-        ZOOKEEPER: [SERVER]
+        ZOOKEEPER: [SERVER]      
+        HDFS: 
+          - NAMENODE
+          - JOURNALNODE
+          - FAILOVERCONTROLLER
+        YARN: 
+          - JOBHISTORY
+        KAFKA:
+          - KAFKA_BROKER
+        HBASE:
+          - MASTER
+          # 1.try leave out the "GATEWAY". 2. add on ALL nodes?!
+          #- GATEWAY
+
+      Master2:
+        ZOOKEEPER: [SERVER]      
+        HDFS: 
+          # 1.try using 2 NameNodes. 2.try with SECONDARYNAMENODE
+          - NAMENODE
+          #- SECONDARYNAMENODE
+          - JOURNALNODE
+          - FAILOVERCONTROLLER
+        YARN: 
+          - RESOURCEMANAGER
+          #- JOBHISTORY  # HA?
+        KAFKA:
+          - KAFKA_BROKER
+          - KAFKA_CONNECT
+          - KAFKA_MIRROR_MAKER
+        SCHEMA_REGISTRY:
+          - SCHEMA_REGISTRY_SERVER
+
+      Master3:
+        ZOOKEEPER: [SERVER]      
+        HDFS:
+          - FAILOVERCONTROLLER
+          - BALANCER
+        YARN:
+          - RESOURCEMANAGER
+        SPARK_ON_YARN:
+          - SPARK_YARN_HISTORY_SERVER
+          - GATEWAY
+        KAFKA:
+          - KAFKA_BROKER
+          - KAFKA_CONNECT
+          - KAFKA_MIRROR_MAKER
+        SCHEMA_REGISTRY:
+          - SCHEMA_REGISTRY_SERVER
+        HBASE:
+          - MASTER
+          #- GATEWAY
+      Edge1:
+        STREAMS_MESSAGING_MANAGER:
+          - STREAMS_MESSAGING_MANAGER_SERVER
+          - STREAMS_MESSAGING_MANAGER_UI        
+        HBASE:
+          - HBASERESTSERVER
+          #- HBASETHRIFTSERVER   # HA?
+        
+        # TODO later: what about "HIVE_LLAP" (roles: HIVESERVER2,LLAPPROXY)
+        HIVE:
+          - HIVEMETASTORE
+          - HIVESERVER2
+          - WEBHCAT
+        HIVE_ON_TEZ:
+          - HIVESERVER2
+        ATLAS:
+          - ATLAS_SERVER
+        INFRA_SOLR:
+          - SOLR_SERVER
+        HUE:
+          - HUE_LOAD_BALANCER
+          - HUE_SERVER
+        RANGER:
+          - RANGER_ADMIN
+          - RANGER_TAGSYNC
+          - RANGER_USERSYNC
+        ZEPPELIN:
+          - ZEPPELIN_SERVER
+      Edge2:
+        HDFS:
+          - NFSGATEWAY
+          - HTTPFS
+        HBASE:
+          #- HBASERESTSERVER    # HA?
+          - HBASETHRIFTSERVER
+        HIVE:
+          - HIVEMETASTORE
+          - HIVESERVER2
+          - WEBHCAT
+        HIVE_ON_TEZ:
+          - HIVESERVER2
+        ATLAS:
+          - ATLAS_SERVER
+        INFRA_SOLR:
+          - SOLR_SERVER
+        HUE:
+          - HUE_LOAD_BALANCER
+          - HUE_SERVER
+        RANGER:
+          - RANGER_ADMIN
+          - RANGER_TAGSYNC
+          - RANGER_USERSYNC
+        KNOX:
+          - IDBROKER
+          - KNOX_GATEWAY
+        ZEPPELIN:
+          - ZEPPELIN_SERVER
+        QUEUEMANAGER:
+          - QUEUEMANAGER_STORE
+          - QUEUEMANAGER_WEBAPP
+          
       Workers:
         HDFS: [DATANODE]
         YARN: [NODEMANAGER]
+        HBASE: [REGIONSERVER]
+
 
 mgmt:
   name: Cloudera Management Service
