@@ -252,9 +252,10 @@ clusters:
           hiveserver2_exec_local_scratch_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
           log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
 
-        WEBHCAT:
-          heap_dump_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
-          log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+        ## TODO fix bug to get "WEBHCAT" enabled (or test on 7.1.6 ?!)
+        # WEBHCAT:
+        #   heap_dump_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+        #   log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
 
         #SERVICEWIDE:
           # set via varlib*j2:
@@ -365,8 +366,8 @@ clusters:
           log_directory_free_space_absolute_thresholds: '{"warning":5368709120,"critical":2147483648}'
 
         #SERVICEWIDE:
+      
 
-    
       ## Services newly added (since not present on the cluster we derived above cfg from)
       # Service
       #SCHEMAREGISTRY:
@@ -437,7 +438,7 @@ clusters:
         HIVE:
           - HIVEMETASTORE
           - HIVESERVER2
-          - WEBHCAT
+          #- WEBHCAT   #TODO fix bug (or test on 7.1.6 ?!)
         HIVE_ON_TEZ:
           - HIVESERVER2
         # Note: I just explicitly added the GATEWAY role here, since TEZ has no other role
@@ -466,7 +467,7 @@ clusters:
         HIVE:
           - HIVEMETASTORE
           - HIVESERVER2
-          - WEBHCAT
+          #- WEBHCAT   #TODO fix bug (or test on 7.1.6 ?!)
         HIVE_ON_TEZ:
           - HIVESERVER2
         TEZ:
