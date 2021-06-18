@@ -487,8 +487,9 @@ clusters:
         KNOX:
           - IDBROKER
           - KNOX_GATEWAY
-        ZEPPELIN:
-          - ZEPPELIN_SERVER
+        ## Only 1 ZEPPELIN allowed!
+        # ZEPPELIN:
+        #   - ZEPPELIN_SERVER
         QUEUEMANAGER:
           - QUEUEMANAGER_STORE
           - QUEUEMANAGER_WEBAPP
