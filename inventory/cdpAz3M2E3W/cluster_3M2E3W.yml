@@ -4,7 +4,7 @@
 cloudera_manager_version: 7.1.4
 
 clusters:
-  - name: Basic Cluster
+  - name: DSS Preview Cluster
     repositories:
       - https://archive.cloudera.com/cdh7/7.1.4.0/parcels/
     services:
@@ -481,8 +481,9 @@ clusters:
           - HUE_SERVER
         RANGER:
           - RANGER_ADMIN
-          - RANGER_TAGSYNC
-          - RANGER_USERSYNC
+          ## Only 1 RANGER_USERSYNC allowed, see Edge1 (not sure about TagSync), but also commenting out now
+          #- RANGER_TAGSYNC
+          #- RANGER_USERSYNC
         KNOX:
           - IDBROKER
           - KNOX_GATEWAY
