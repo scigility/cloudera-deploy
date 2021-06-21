@@ -223,14 +223,13 @@ clusters:
           log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
           process_auto_restart: "true"
           role_config_suppression_port: "true"
-
-        KAFKA_CONNECT:
-          log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
-          process_auto_restart: "true"
-
-        KAFKA_MIRROR_MAKER:
-          log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
-          process_auto_restart: "true"
+        ## Disable following 2 because they require extra custom configs like a "Broker List" to work
+        # KAFKA_CONNECT:
+        #   log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+        #   process_auto_restart: "true"
+        # KAFKA_MIRROR_MAKER:
+        #   log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+        #   process_auto_restart: "true"
 
         SERVICEWIDE:
           log.cleaner.delete.retention.ms: "259200000"
@@ -402,8 +401,9 @@ clusters:
           #- JOBHISTORY  # HA?
         KAFKA:
           - KAFKA_BROKER
-          - KAFKA_CONNECT
-          - KAFKA_MIRROR_MAKER
+          ## disabled
+          #- KAFKA_CONNECT
+          #- KAFKA_MIRROR_MAKER
         SCHEMAREGISTRY:
           - SCHEMA_REGISTRY_SERVER
 
@@ -420,8 +420,9 @@ clusters:
           - GATEWAY
         KAFKA:
           - KAFKA_BROKER
-          - KAFKA_CONNECT
-          - KAFKA_MIRROR_MAKER
+          ## disabled
+          #- KAFKA_CONNECT
+          #- KAFKA_MIRROR_MAKER
         SCHEMAREGISTRY:
           - SCHEMA_REGISTRY_SERVER
         HBASE:
