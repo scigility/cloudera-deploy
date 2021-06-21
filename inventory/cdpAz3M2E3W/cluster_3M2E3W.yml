@@ -379,8 +379,8 @@ clusters:
         ZOOKEEPER: [SERVER]      
         HDFS: 
           - NAMENODE
-          - JOURNALNODE
-          - FAILOVERCONTROLLER
+          #- JOURNALNODE
+          #- FAILOVERCONTROLLER
         YARN: 
           - JOBHISTORY
         KAFKA:
@@ -393,11 +393,11 @@ clusters:
       Master2:
         ZOOKEEPER: [SERVER]      
         HDFS: 
-          # 1.try using 2 NameNodes. 2.try with SECONDARYNAMENODE
-          - NAMENODE
-          #- SECONDARYNAMENODE
-          - JOURNALNODE
-          - FAILOVERCONTROLLER
+          # 1.try using 2 NameNodes did not work -> 2.try with SECONDARYNAMENODE
+          #- NAMENODE
+          - SECONDARYNAMENODE
+          #- JOURNALNODE
+          #- FAILOVERCONTROLLER
         YARN: 
           - RESOURCEMANAGER
           #- JOBHISTORY  # HA?
@@ -412,8 +412,8 @@ clusters:
       Master3:
         ZOOKEEPER: [SERVER]      
         HDFS:
-          - JOURNALNODE
-          - FAILOVERCONTROLLER
+          #- JOURNALNODE
+          #- FAILOVERCONTROLLER
           - BALANCER
         YARN:
           - RESOURCEMANAGER
