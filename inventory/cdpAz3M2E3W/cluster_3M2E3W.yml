@@ -383,6 +383,8 @@ clusters:
           #- FAILOVERCONTROLLER
         YARN: 
           - JOBHISTORY
+        HIVE_ON_TEZ:
+          - GATEWAY
         KAFKA:
           - KAFKA_BROKER
         HBASE:
@@ -401,6 +403,8 @@ clusters:
         YARN: 
           - RESOURCEMANAGER
           #- JOBHISTORY  # HA?
+        HIVE_ON_TEZ:
+          - GATEWAY
         KAFKA:
           - KAFKA_BROKER
           ## disabled
@@ -419,6 +423,9 @@ clusters:
           - RESOURCEMANAGER
         SPARK_ON_YARN:
           - SPARK_YARN_HISTORY_SERVER
+          - GATEWAY
+        # required by Spark history server
+        HIVE_ON_TEZ:
           - GATEWAY
         KAFKA:
           - KAFKA_BROKER
@@ -441,18 +448,18 @@ clusters:
         # TODO later: what about "HIVE_LLAP" (roles: HIVESERVER2,LLAPPROXY)
         HIVE:
           - HIVEMETASTORE
+          - GATEWAY
           # we only need "HIVESERVER2" role in service "HIVE_ON_TEZ"
           #- HIVESERVER2
           #- WEBHCAT   #TODO fix bug (or test on 7.1.6 ?!)
         HIVE_ON_TEZ:
           - HIVESERVER2
-        # Note: I just explicitly added the GATEWAY role here, since TEZ has no other role
-        TEZ:
           - GATEWAY
         ATLAS:
           - ATLAS_SERVER
         INFRA_SOLR:
           - SOLR_SERVER
+          - GATEWAY
         HUE:
           - HUE_LOAD_BALANCER
           - HUE_SERVER
@@ -462,24 +469,41 @@ clusters:
           - RANGER_USERSYNC
         ZEPPELIN:
           - ZEPPELIN_SERVER
+        # Gateway-only Roles:
+        HDFS:
+          - GATEWAY
+        #INFRA_SOLR: [GATEWAY]
+        #HIVE_ON_TEZ: [GATEWAY]
+        KAFKA:
+          - GATEWAY
+        #HIVE: [GATEWAY]
+        TEZ:
+          - GATEWAY
+        YARN:
+          - GATEWAY
+        SPARK_ON_YARN:
+          - GATEWAY
+
       Edge2:
         HDFS:
           - NFSGATEWAY
           - HTTPFS
+          - GATEWAY
         HBASE:
           #- HBASERESTSERVER    # HA?
           - HBASETHRIFTSERVER
         HIVE:
           - HIVEMETASTORE
+          - GATEWAY
           #- WEBHCAT   #TODO fix bug (or test on 7.1.6 ?!)
         HIVE_ON_TEZ:
           - HIVESERVER2
-        TEZ:
           - GATEWAY
         ATLAS:
           - ATLAS_SERVER
         INFRA_SOLR:
           - SOLR_SERVER
+          - GATEWAY
         HUE:
           - HUE_LOAD_BALANCER
           - HUE_SERVER
@@ -497,7 +521,17 @@ clusters:
         QUEUEMANAGER:
           - QUEUEMANAGER_STORE
           - QUEUEMANAGER_WEBAPP
-          
+        # Gateway-only Roles:
+        KAFKA:
+          - GATEWAY
+        TEZ:
+          - GATEWAY
+        YARN:
+          - GATEWAY
+        SPARK_ON_YARN:
+          - GATEWAY
+      
+      # TODO Do we need GATEWAY roles on workers?
       Workers:
         HDFS: [DATANODE]
         YARN: [NODEMANAGER]
