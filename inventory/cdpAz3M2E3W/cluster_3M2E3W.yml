@@ -410,6 +410,7 @@ clusters:
       Master3:
         ZOOKEEPER: [SERVER]      
         HDFS:
+          - JOURNALNODE
           - FAILOVERCONTROLLER
           - BALANCER
         YARN:
