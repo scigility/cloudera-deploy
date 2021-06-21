@@ -425,6 +425,8 @@ clusters:
           - SPARK_YARN_HISTORY_SERVER
           - GATEWAY
         # required by Spark history server
+        HIVE:
+          - GATEWAY
         HIVE_ON_TEZ:
           - GATEWAY
         KAFKA:
