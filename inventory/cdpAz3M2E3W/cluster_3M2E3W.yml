@@ -3,7 +3,10 @@
 # gateway_master_secret
 # idbroker_master_secret
 
-# 
+## Other custom vars used in the "clusters" config:
+tmp_base: "/tmp"   # TODO on DSS: /app/tmp
+
+## Start of config expected by cloudera playbooks/roles:
 cloudera_manager_version: 7.1.4
 
 clusters:
@@ -112,7 +115,7 @@ clusters:
           role_health_suppression_name_node_safe_mode: "true"
 
         NFSGATEWAY:
-          dfs_nfs3_dump_dir: "/app/tmp/.hdfs-nfs"
+          dfs_nfs3_dump_dir: "{{tmp_base}}/.hdfs-nfs"
           heap_dump_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
           log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
           nfsgateway_dump_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
