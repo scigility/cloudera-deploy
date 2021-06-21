@@ -1,4 +1,7 @@
 ---
+## Below "clusters" config depends on extra secret vars to be set in the profile or inventory:
+# gateway_master_secret
+# idbroker_master_secret
 
 # 
 cloudera_manager_version: 7.1.4
@@ -263,6 +266,7 @@ clusters:
         #GATEWAY:
 
         IDBROKER:
+          idbroker_master_secret: "{{ idbroker_master_secret }}"
           # set via varlib*j2:
           #idbroker_conf_dir: "/app/opt/knox/idbroker/conf"
           #idbroker_data_dir: "/app/opt/knox/idbroker/data"
@@ -270,6 +274,7 @@ clusters:
           process_auto_restart: "true"
 
         KNOX_GATEWAY:
+          gateway_master_secret: "{{ gateway_master_secret }}"
           #gateway_conf_dir: "/app/opt/knox/gateway/conf"
           #gateway_data_dir: "/app/opt/knox/gateway/data"
           #gateway_ranger_knox_plugin_conf_path: "/app/opt/knox/ranger-knox-plugin"

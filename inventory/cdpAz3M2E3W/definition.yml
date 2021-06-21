@@ -12,6 +12,10 @@ preload_cm_parcel_repo: no
 # but specifying it here seems not working, so I provide it via cmdline --extra-vars
 #admin_password: "<pass would go here>"
 
+# Secret vars used in the "clusters" config:
+gateway_master_secret: "{{ admin_password }}"
+idbroker_master_secret: "{{ admin_password }}"
+
 ## Specifies the Cloud Infrastructure provider, CDP presently supports GCP, AWS and Azure
 ## Those should not necessary when using a static Ansible inventory
 infra_type:
