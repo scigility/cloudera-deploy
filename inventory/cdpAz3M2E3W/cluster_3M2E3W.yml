@@ -244,12 +244,9 @@ clusters:
           heap_dump_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
           hive_metastore_server_max_message_size: "858993459"
           log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
-
-        HIVESERVER2:
-          heap_dump_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
-          hiveserver2_downloaded_resources_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
-          hiveserver2_exec_local_scratch_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
-          log_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
+        ## Note: we only need "HIVESERVER2" role in service "HIVE_ON_TEZ"
+        #HIVESERVER2:
+        #  heap_dump_directory_free_space_absolute_thresholds: '{"warning":2147483648,"critical":1073741824}'
 
         ## TODO fix bug to get "WEBHCAT" enabled (or test on 7.1.6 ?!)
         # WEBHCAT:
@@ -439,7 +436,8 @@ clusters:
         # TODO later: what about "HIVE_LLAP" (roles: HIVESERVER2,LLAPPROXY)
         HIVE:
           - HIVEMETASTORE
-          - HIVESERVER2
+          # we only need "HIVESERVER2" role in service "HIVE_ON_TEZ"
+          #- HIVESERVER2
           #- WEBHCAT   #TODO fix bug (or test on 7.1.6 ?!)
         HIVE_ON_TEZ:
           - HIVESERVER2
@@ -468,7 +466,6 @@ clusters:
           - HBASETHRIFTSERVER
         HIVE:
           - HIVEMETASTORE
-          - HIVESERVER2
           #- WEBHCAT   #TODO fix bug (or test on 7.1.6 ?!)
         HIVE_ON_TEZ:
           - HIVESERVER2
