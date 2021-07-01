@@ -1,4 +1,13 @@
 ---
+## Cloudera roles vars overrides
+
+## Note for kerberos deployment to be enabled, we need to ensure 2 things:
+## 1) cluster.yml: "kerberos" tag included. 
+## 2) existing inventory group "krb5_server" with 1 node
+krb5_kdc_type: "MIT KDC"
+krb5_kdc_master_password: changeme
+
+
 ## Below "clusters" config depends on extra secret vars to be set in the profile or inventory:
 # gateway_master_secret
 # idbroker_master_secret
