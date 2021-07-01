@@ -356,7 +356,7 @@ clusters:
         # MASTER:
         REGIONSERVER:
           hbase_bucketcache_size: "1"
-          hbase_regionserver_java_heapsize: "52428800"
+          hbase_regionserver_java_heapsize: "4294967296"  #4GB
         SERVICEWIDE:
           rm_dirty: "true"
 
