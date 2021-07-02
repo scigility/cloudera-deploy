@@ -1,0 +1,26 @@
+---
+use_default_cluster_definition: no
+use_download_mirror: no
+preload_cm_parcel_repo: no
+
+## [LH] moved vars here from  ~/.config/cloudera-deploy/profiles:
+# but specifying it here seems not working, so I provide it via cmdline --extra-vars
+#admin_password: "<pass would go here>"
+
+# Secret vars used in the "clusters" config:
+gateway_master_secret: "{{ admin_password }}"
+idbroker_master_secret: "{{ admin_password }}"
+
+## Specifies the Cloud Infrastructure provider, CDP presently supports GCP, AWS and Azure
+## Those should not necessary when using a static Ansible inventory
+# infra_type:
+# infra:
+# datahub:
+# env:
+
+## Vars to configure the "teardown" playbook tag
+teardown_preserve_parcels: true
+# Teardown the "cluster" but not CM, nor CMS (the CM services, under link "Cloudera Management Service"!)
+teardown_everything: false
+teardown_cms: False
+teardown_cluster: "all"
