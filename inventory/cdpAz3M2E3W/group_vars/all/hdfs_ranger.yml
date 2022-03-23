@@ -1,0 +1,53 @@
+### Vars used by the playbook deploy-tenant-on-cdp.yml
+
+### Generic configs
+_tenants: 
+  - tenant: tenant1
+#  - tenant: tenant2
+
+
+### HDFS Folder related configs
+
+hdfs_folder_tenants: "{{ _tenants }}"
+hdfs_folders:
+- name: "/{{ tenant }}"
+  owner: "{{ tenant }}"
+  mode: "0700"
+- name: "/{{ tenant }}/rds"
+  owner: "{{ tenant }}"
+  mode: "0700"
+- name: "/{{ tenant }}/ios"
+  owner: "{{ tenant }}"
+  mode: "0700"
+# Do we need an "apps" dir?
+#- name: "{{ tenant }}/apps"
+
+
+### Ranger (module) related configs
+
+# used in playbook "deploy-tenant-on-cdp.yml"
+ranger_tenants: "{{ _tenants }}"
+# TODO define ranger host
+#ranger_host: "{{ inventory_hostname }}"
+ranger_host: "{{ groups.edge[0] }}"
+ranger_admin_url: "http://{{ ranger_host }}:6080"
+ranger_admin_username: admin
+# Ranger Admin passwd as defined in the cloudera-playbook:
+ranger_admin_password: "{{ ranger_rangeradmin_user_password | default('password123') }}"
+
+# TODO re-use the tenants list
+ranger_hdfs_policies:
+  - name: "HDFS Base policies for {{ tenant }}"
+    # TODO using jquery, generated the list from the hdfs_folders var
+    paths: 
+    - "/{{ tenant }}/rds"
+    - "/{{ tenant }}/ios"
+    permissions:
+    - users:
+      - "{{ tenant }}"
+      groups:
+      - "{{ tenant }}"
+      accesses:
+      - Write
+      - read
+      - execute

@@ -1,0 +1,11 @@
+---
+# Just a dummy playbook call from the main playbook after the cluster install was done
+- name: Coda
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  become: no
+  tasks:
+    - name: Deployment results
+      debug:
+        msg: Success!
